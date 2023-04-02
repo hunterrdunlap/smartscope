@@ -8,7 +8,7 @@ const ChatGenerator: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result = await axios.post('/generate', { text: prompt });
+      const result = await axios.post('http://localhost:8000/generate', { text: prompt });
       setResponse(result.data.response);
     } catch (error) {
       console.error('Error generating chat:', error);
