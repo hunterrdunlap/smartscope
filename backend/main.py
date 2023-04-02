@@ -2,6 +2,12 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from prompt import Prompt
 from generate_text import generate_text
+import os
+from dotenv import load_dotenv
+import openai
+
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = FastAPI()
 

@@ -6,9 +6,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>OpenAI Chat Generator</h1>
+        <h2>OpenAI Chat Generator</h2>
       </header>
-      <main>
+      <main className="App-main">
         <ChatGenerator />
       </main>
     </div>

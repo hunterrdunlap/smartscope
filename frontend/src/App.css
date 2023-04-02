@@ -1,5 +1,11 @@
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+
 }
 
 .App-logo {
@@ -15,13 +21,10 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  width: 100%;
+  padding: 1rem 0;
   color: white;
+  text-align: center;
 }
 
 .App-link {
@@ -35,4 +38,44 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.App-main {
+  padding: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.prompt-input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.submit-button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+}
+
+.response-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #e9ecef;
+  border-radius: 4px;
 }
