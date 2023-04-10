@@ -1,7 +1,7 @@
 from main import Prompt
 import openai
 
-def generate_text(prompt: Prompt, max_tokens=1000):
+def generate_text(prompt: Prompt, max_tokens=4000):
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=prompt,

@@ -5,6 +5,7 @@ const ChatGenerator: React.FC = () => {
   const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [tokenCount, setTokenCount] = useState(0);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -18,6 +19,12 @@ const ChatGenerator: React.FC = () => {
     setLoading(false);
   };
 
+  const countTokens = (text: string) => {
+    // Replace this regular expression with a more sophisticated one if needed
+    const tokens = text.split(/[\s,.;?!]+/);
+    return tokens.length;
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -26,9 +33,16 @@ const ChatGenerator: React.FC = () => {
           <textarea
             className="prompt-input"
             value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
+            onChange={(e) => {
+              setPrompt(e.target.value)
+              setTokenCount(countTokens(e.target.value));
+            }}
           />
         </label>
+        <p>
+          Token count: {tokenCount}{' '}
+          {tokenCount > 4000 && <span style={{ color: 'red' }}>(Too long! Maximum allowed length is 4000 tokens)</span>}
+        </p>
         <button className="submit-button" type="submit" disabled={loading}>
           Generate Chat
         </button>
