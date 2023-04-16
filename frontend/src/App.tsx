@@ -1,12 +1,12 @@
-import React from 'react';
-import './App.css';
-import ChatGenerator from './components/ChatGenerator';
+import React from "react";
+import "./App.css";
+import ChatGenerator from "./components/ChatGenerator";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h2>OpenAI Chat Generator</h2>
+        <h2>Pina Message Generator</h2>
       </header>
       <main className="App-main">
         <ChatGenerator />

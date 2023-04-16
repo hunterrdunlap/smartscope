@@ -1,4 +1,5 @@
 import pickle
+from typing import Dict
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from generate_text import generate_text
@@ -32,11 +33,19 @@ def generate_chat(prompt: Prompt):
     except Exception as ex:
         raise HTTPException(status_code=500, detail=str(ex))
     
+@app.post("/count-tokens")
+def count_tokens_endpoint(prompt: Prompt):
+    if prompt.text is None:
+        raise HTTPException(status_code=400, detail="Text is required")
+
+    token_count = count_tokens(prompt.text)
+    return {"token_count": token_count}
+    
 
 # helper function for counting tokens
 def count_tokens(text: str) -> int:
     enc = encoding_for_model(e("MODEL"))
-    tokens = enc(text)
+    tokens = enc.encode(text)
     return len(tokens)
     
     

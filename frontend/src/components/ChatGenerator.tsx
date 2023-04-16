@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const ChatGenerator: React.FC = () => {
-  const [prompt, setPrompt] = useState('');
-  const [response, setResponse] = useState('');
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [tokenCount, setTokenCount] = useState(0);
 
@@ -11,10 +11,12 @@ const ChatGenerator: React.FC = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const result = await axios.post('http://localhost:8000/generate', { text: prompt });
+      const result = await axios.post("http://localhost:8000/generate", {
+        text: prompt,
+      });
       setResponse(result.data.response);
     } catch (error) {
-      console.error('Error generating chat:', error);
+      console.error("Error generating chat:", error);
     }
     setLoading(false);
   };
@@ -25,6 +27,18 @@ const ChatGenerator: React.FC = () => {
     return tokens.length;
   };
 
+  const countTokens2 = async (text: string) => {
+    try {
+      const response = await axios.post("http://localhost:8000/count-tokens", {
+        text: text,
+      });
+      return response.data.token_count;
+    } catch (error) {
+      console.error("Error counting tokens:", error);
+      return -1; // Return -1 to indicate an error
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -33,15 +47,19 @@ const ChatGenerator: React.FC = () => {
           <textarea
             className="prompt-input"
             value={prompt}
-            onChange={(e) => {
-              setPrompt(e.target.value)
-              setTokenCount(countTokens(e.target.value));
+            onChange={async (e) => {
+              setPrompt(e.target.value);
+              setTokenCount(await countTokens2(e.target.value));
             }}
           />
         </label>
         <p>
-          Token count: {tokenCount}{' '}
-          {tokenCount > 4000 && <span style={{ color: 'red' }}>(Too long! Maximum allowed length is 4000 tokens)</span>}
+          Token count: {tokenCount}{" "}
+          {tokenCount > 4000 && (
+            <span style={{ color: "red" }}>
+              (Too long! Maximum allowed length is 4000 tokens)
+            </span>
+          )}
         </p>
         <button className="submit-button" type="submit" disabled={loading}>
           Generate Chat
