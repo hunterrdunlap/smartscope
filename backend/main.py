@@ -42,7 +42,7 @@ index = faiss.IndexFlatL2(embedding_size)
 embedding_fn = OpenAIEmbeddings().embed_query
 vectorstore = FAISS(embedding_fn, index, InMemoryDocstore({}), {})
 retriever = vectorstore.as_retriever(search_kwargs=dict(k=3))
-memory = VectorStoreRetrieverMemory(retriever=retriever)
+memory = VectorStoreRetrieverMemory(retriever=retriever, memory_key="chat_history", input_key="question")
 
 @app.get("/")
 def read_root():
