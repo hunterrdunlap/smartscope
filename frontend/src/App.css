@@ -5,7 +5,6 @@
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
   min-height: 100vh;
-
 }
 
 .App-logo {
@@ -40,21 +39,6 @@
   }
 }
 
-.App-main {
-  padding: 2rem;
-  width: 100%;
-  max-width: 800px;
-}
-
-.prompt-input {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-}
-
 .submit-button {
   background-color: #4caf50;
   border: none;
@@ -73,9 +57,159 @@
   background-color: #45a049;
 }
 
+.App-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+
+.word-count {
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  color: #777;
+}
+
+/* .prompt-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+} */
+
+.prompt-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: url("tree_bark.jpg"); /* set the URL of your image */
+  background-size: cover; /* adjust to fit the container */
+  background-position: center center; /* center the image */
+  background-repeat: no-repeat; /* prevent repetition */
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.response-wrapper {
+  width: 80%;
+  margin: 0 auto; /* center the container */
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.prompt-input {
+  flex-grow: 1;
+  max-width: 100%;
+  min-height: 140px;
+  min-width: 200px;
+  resize: none; /* disable resizing */
+  border: 1px solid rgb(248, 248, 248); /* border color */
+  border-radius: 4px; /* add border radius */
+  padding: 4px; /* add padding */
+  font-size: 16px; /* set font size */
+  box-sizing: border-box; /* add this for consistent sizing */
+  width: 100%;
+  background-color: #000000;
+  color: white; /* set font color to white */
+  outline: none; /* remove the blue border around the element */
+}
+
+.submit-button {
+  flex-shrink: 0;
+  background-color: #25d956;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.response-logo {
+  width: 30px; /* Adjust the size as needed */
+  height: auto;
+  margin-right: 8px;
+  position: absolute; /* Make the logo appear above the text */
+  top: 0;
+  left: 0;
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
 .response-container {
+  position: relative;
   margin-top: 2rem;
   padding: 1rem;
-  background-color: #e9ecef;
-  border-radius: 4px;
+  text-align: left;
+  max-width: 100%;
+  width: 80%;
+  margin-left: auto; /* Add this to center the container */
+  margin-right: auto; /* Add this to center the container */
+  margin-bottom: 2rem;
+  border: 1px solid #ccc; /* Add this to create a border */
+  border-radius: 8px; /* Add this to round the corners */
+  background-color: #c4f5c3;
+}
+
+.questions-responses-container {
+  max-height: 80vh; /* Adjust this value according to the desired height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-bottom: 2rem;
+}
+
+.question-container {
+  position: relative;
+  margin-top: 2rem;
+  padding: 1rem;
+  text-align: left;
+  max-width: 100%;
+  width: 80%; /* Change the width to 80% */
+  margin-left: auto; /* Add this to center the container */
+  margin-right: auto; /* Add this to center the container */
+  margin-bottom: 2rem;
+  border: 1px solid #ccc; /* Add this to create a border */
+  border-radius: 8px; /* Add this to round the corners */
+  background-color: #c4c4c4;
+  animation: fadeIn 3s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 800px) {
+  .prompt-input {
+    max-width: 90%;
+    margin-right: 1rem;
+  }
+
+  .submit-button {
+    margin-left: 0;
+    width: 100%;
+  }
 }

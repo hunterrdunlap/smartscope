@@ -1,60 +1,81 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { encode, decode } from "gpt-3-encoder";
+import tree_brain from "../tree_brain.png";
+import logo from "../Pina Logo.png";
 
 const ChatGenerator: React.FC = () => {
   const [prompt, setPrompt] = useState("");
-  const [response, setResponse] = useState("");
+  const [responses, setResponses] = useState([] as string[]);
+  const [questions, setQuestions] = useState([] as string[]);
   const [loading, setLoading] = useState(false);
   const [tokenCount, setTokenCount] = useState(0);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
+    setQuestions((prevQuestions) => [...prevQuestions, prompt]);
     try {
       const result = await axios.post("http://localhost:8000/generate", {
         text: prompt,
       });
-      setResponse(result.data.response);
+      setResponses((prevResponses) => [...prevResponses, result.data.response]);
     } catch (error) {
       console.error("Error generating chat:", error);
     }
     setLoading(false);
+    setPrompt("");
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as any);
+    }
   };
 
   const countTokens = (text: string) => {
     // Replace this regular expression with a more sophisticated one if needed
     const tokens = text.split(/[\s,.;?!]+/);
-    return tokens.length;
-  };
-
-  const countTokens2 = async (text: string) => {
-    try {
-      const response = await axios.post("http://localhost:8000/count-tokens", {
-        text: text,
-      });
-      return response.data.token_count;
-    } catch (error) {
-      console.error("Error counting tokens:", error);
-      return -1; // Return -1 to indicate an error
-    }
+    return tokens.length - 1;
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Prompt:
-          <textarea
-            className="prompt-input"
-            value={prompt}
-            onChange={async (e) => {
-              setPrompt(e.target.value);
-              setTokenCount(await countTokens2(e.target.value));
-            }}
-          />
-        </label>
-        <p>
-          Token count: {tokenCount}{" "}
+      <div className="questions-responses-container">
+        {questions.map((question, index) => (
+          <div key={index}>
+            <div className="question-container response-wrapper">
+              <img src={logo} alt="Logo" className="response-logo" />{" "}
+              <h5>{question}</h5>
+            </div>
+            {responses[index] ? (
+              <div className="response-container response-wrapper">
+                <img src={tree_brain} alt="Logo" className="response-logo" />{" "}
+                <h5>{responses[index]}</h5>
+              </div>
+            ) : (
+              loading && <p>Loading response...</p>
+            )}
+          </div>
+        ))}
+      </div>
+      <form onSubmit={handleSubmit} className="prompt-container">
+        <div className="input-container">
+          <label>
+            <textarea
+              className="prompt-input"
+              value={prompt}
+              onChange={async (e) => {
+                setPrompt(e.target.value);
+                setTokenCount(await countTokens(e.target.value));
+              }}
+              onKeyPress={handleKeyPress}
+            />
+          </label>
+        </div>
+        <p className="word-count">
+          Word Count : ~{tokenCount}{" "}
           {tokenCount > 4000 && (
             <span style={{ color: "red" }}>
               (Too long! Maximum allowed length is 4000 tokens)
@@ -62,16 +83,9 @@ const ChatGenerator: React.FC = () => {
           )}
         </p>
         <button className="submit-button" type="submit" disabled={loading}>
-          Generate Chat
+          Submit
         </button>
       </form>
-      {loading && <p>Loading...</p>}
-      {response && (
-        <div className="response-container">
-          <h3>Generated Chat:</h3>
-          <p>{response}</p>
-        </div>
-      )}
     </div>
   );
 };
