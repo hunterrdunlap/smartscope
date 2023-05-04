@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .App {
   display: flex;
   flex-direction: column;
@@ -24,6 +28,9 @@
   padding: 1rem 0;
   color: white;
   text-align: center;
+  position: fixed;
+  top: 0;
+  z-index: 100;
 }
 
 .App-link {
@@ -63,6 +70,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 100vh;
+  padding-top: 3.5rem; /* Add padding to the top to accommodate the header height */
 }
 
 .word-count {
@@ -98,6 +106,7 @@
   background-position: center center; /* center the image */
   background-repeat: no-repeat; /* prevent repetition */
   background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .response-wrapper {
@@ -169,6 +178,14 @@
   border: 1px solid #ccc; /* Add this to create a border */
   border-radius: 8px; /* Add this to round the corners */
   background-color: #c4f5c3;
+}
+
+.chat-history-container {
+  padding: 2rem;
+  padding-bottom: calc(6rem + 160px);
+  overflow-y: auto;
+  max-height: 80vh;
+  width: 100%;
 }
 
 .questions-responses-container {

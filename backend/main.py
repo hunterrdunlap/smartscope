@@ -2,24 +2,22 @@ import logging
 import pickle
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from chat_history import ChatHistory
-from generate_text import generate_text
+from generate_text import generate_sources, generate_text, generate_prompt
 from os import environ as env
 from dotenv import load_dotenv
 from prompt import Prompt
 import faiss
-from tiktoken import encoding_for_model
-from langchain.memory import ConversationBufferMemory
 
 from langchain.docstore import InMemoryDocstore
 from langchain.vectorstores import FAISS
-from datetime import datetime
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms import OpenAI
 from langchain.memory import VectorStoreRetrieverMemory
-from langchain.chains import ConversationChain
-from langchain.prompts import PromptTemplate
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
 
 load_dotenv()
@@ -57,21 +55,23 @@ def generate_chat(prompt: Prompt):
     except Exception as ex:
         raise HTTPException(status_code=500, detail=str(ex))
     
-@app.post("/count-tokens")
-def count_tokens_endpoint(prompt: Prompt):
-    if prompt.text is None:
-        raise HTTPException(status_code=400, detail="Text is required")
-
-    token_count = count_tokens(prompt.text)
-    return {"token_count": token_count}
+@app.post("/generate-prompt")
+def generate_prompt_for_gpt(prompt: Prompt):
+    try:
+        generated_prompt = generate_prompt(prompt.text, api_key = e("OPENAI_API_KEY"), store=store)
+        
+        return {"response": generated_prompt}
+    except Exception as ex:
+        raise HTTPException(status_code=500, detail=str(ex))
     
-
-# helper function for counting tokens
-def count_tokens(text: str) -> int:
-    enc = encoding_for_model(e("MODEL"))
-    tokens = enc.encode(text)
-    return len(tokens)
-    
+@app.post("/generate-sources")
+def generate_sources_from_prompt(prompt: Prompt):
+    try:
+        sources = generate_sources(prompt.text, store=store, api_key = e("OPENAI_API_KEY"))
+        
+        return {"response": sources}
+    except Exception as ex:
+        raise HTTPException(status_code=500, detail=str(ex))    
     
 app.add_middleware(
     CORSMiddleware,

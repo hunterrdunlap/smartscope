@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h2>Pina Message Generator</h2>
+        <h2>PinaGPT</h2>
       </header>
       <main className="App-main">
         <ChatGenerator />

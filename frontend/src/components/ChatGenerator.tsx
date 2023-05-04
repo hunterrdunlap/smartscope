@@ -3,6 +3,7 @@ import axios from "axios";
 import { encode, decode } from "gpt-3-encoder";
 import tree_brain from "../tree_brain.png";
 import logo from "../Pina Logo.png";
+import ReactMarkDown from "react-markdown";
 
 const ChatGenerator: React.FC = () => {
   const [prompt, setPrompt] = useState("");
@@ -27,12 +28,27 @@ const ChatGenerator: React.FC = () => {
     setPrompt("");
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e as any);
+  const generatePrompt = async () => {
+    setLoading(true);
+    setQuestions((prevQuestions) => [...prevQuestions, prompt]);
+    try {
+      const result = await axios.post("http://localhost:8000/generate-prompt", {
+        text: prompt,
+      });
+      setResponses((prevResponses) => [...prevResponses, result.data.response]);
+    } catch (error) {
+      console.error("Error generating prompt:", error);
     }
+    setLoading(false);
+    setPrompt("");
   };
+
+  // const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  //   if (e.key === "Enter" && !e.shiftKey) {
+  //     e.preventDefault();
+  //     handleSubmit(e as any);
+  //   }
+  // };
 
   const countTokens = (text: string) => {
     // Replace this regular expression with a more sophisticated one if needed
@@ -41,18 +57,18 @@ const ChatGenerator: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="chat-history-container">
       <div className="questions-responses-container">
         {questions.map((question, index) => (
           <div key={index}>
             <div className="question-container response-wrapper">
               <img src={logo} alt="Logo" className="response-logo" />{" "}
-              <h5>{question}</h5>
+              <ReactMarkDown>{question}</ReactMarkDown>
             </div>
             {responses[index] ? (
               <div className="response-container response-wrapper">
                 <img src={tree_brain} alt="Logo" className="response-logo" />{" "}
-                <h5>{responses[index]}</h5>
+                <ReactMarkDown>{responses[index]}</ReactMarkDown>
               </div>
             ) : (
               loading && <p>Loading response...</p>
@@ -70,7 +86,7 @@ const ChatGenerator: React.FC = () => {
                 setPrompt(e.target.value);
                 setTokenCount(await countTokens(e.target.value));
               }}
-              onKeyPress={handleKeyPress}
+              // onKeyPress={handleKeyPress}
             />
           </label>
         </div>
@@ -82,8 +98,16 @@ const ChatGenerator: React.FC = () => {
             </span>
           )}
         </p>
-        <button className="submit-button" type="submit" disabled={loading}>
+        {/* <button className="submit-button" type="submit" disabled={true}>
           Submit
+        </button> */}
+        <button
+          className="submit-button"
+          type="button"
+          disabled={loading}
+          onClick={generatePrompt}
+        >
+          Generate Prompt
         </button>
       </form>
     </div>
