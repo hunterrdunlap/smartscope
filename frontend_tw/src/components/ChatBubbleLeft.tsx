@@ -1,5 +1,4 @@
 import React from "react";
-import ReactMarkDown from "react-markdown";
 
 type ChatBubbleLeftProps = {
   message: string;

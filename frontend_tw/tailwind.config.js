@@ -6,6 +6,9 @@ export default {
       overscrollBehavior: {
         contain: "contain",
       },
+      animation: {
+        "spin-slow": "spin 3s linear infinite",
+      },
     },
   },
   plugins: [require("daisyui"), require("@tailwindcss/typography")],
