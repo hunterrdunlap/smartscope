@@ -9,6 +9,7 @@ const ChatGenerator: React.FC = () => {
   const [questions, setQuestions] = useState([] as string[]);
   const [loading, setLoading] = useState(false);
   const [tokenCount, setTokenCount] = useState(0);
+  const [toggleState, setToggleState] = useState(false);
 
   const generateResponse = async () => {
     setLoading(true);
@@ -81,6 +82,19 @@ const ChatGenerator: React.FC = () => {
       )}
       <div className="flex container h-[80vh] w-full">
         <div className="grid h-full w-6/12 object-contain flex-grow card bg-base-300 rounded-box place-items-center">
+          <div className="form-control place-items-center">
+            Select Model Type:
+            <label className="cursor-pointer label">
+              <span className="label-text p-3 $">davinci-003</span>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary"
+                checked={toggleState}
+                onChange={() => setToggleState(!toggleState)}
+              />
+              <span className="label-text p-3">gpt-4</span>
+            </label>
+          </div>
           Token Count: {tokenCount}
           <div>
             <button onClick={resetChat} className="btn btn-accent">

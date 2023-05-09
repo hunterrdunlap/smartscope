@@ -10,6 +10,7 @@ from os import environ as env
 from langchain.document_loaders import UnstructuredMarkdownLoader
 from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import SpacyTextSplitter
 from dotenv import load_dotenv
 
 logging.basicConfig(
@@ -33,7 +34,7 @@ pdf_files = list(Path("pdfs/").glob("**/*.pdf"))
 all_processed_docs = []
 
 logging.info("Ingesting MarkDown Files...")
-md_splitter = MarkdownTextSplitter(chunk_size=1500, chunk_overlap=200)
+md_splitter = MarkdownTextSplitter(chunk_size=1000, chunk_overlap=100)
 for md_file in md_files:
     data = UnstructuredMarkdownLoader(md_file).load()
     metadata = data[0].metadata
@@ -46,10 +47,9 @@ for md_file in md_files:
     
         
 logging.info("Ingesting PDF Files...") 
-text_splitter = CharacterTextSplitter(        
-    separator = "\n\n",
-    chunk_size = 1500,
-    chunk_overlap  = 200,
+text_splitter = SpacyTextSplitter(        
+    chunk_size = 1000,
+    chunk_overlap  = 100,
     length_function = len,
 )
 for pdf_file in pdf_files:
