@@ -45,11 +45,19 @@ memory = VectorStoreRetrieverMemory(retriever=retriever, memory_key="chat_histor
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+@app.post("/reset-memory")
+def reset_memory():
+    global memory
+    vectorstore = FAISS(embedding_fn, index, InMemoryDocstore({}), {})
+    retriever = vectorstore.as_retriever(search_kwargs=dict(k=3))
+    memory = VectorStoreRetrieverMemory(retriever=retriever, memory_key="chat_history", input_key="question")
+    return {"response": "Memory Reset"}
     
 @app.post("/generate")
 def generate_chat(prompt: Prompt):
     try:
-        generated_text = generate_text(prompt.text, api_key = e("OPENAI_API_KEY"), model = e("MODEL"), store=store, memory=memory)
+        generated_text = generate_text(prompt.text, api_key = e("OPENAI_API_KEY"), model = prompt.model, store=store, memory=memory)
 
         return {"response": generated_text}
     except Exception as ex:

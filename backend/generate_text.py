@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 prompt_template = """
-You are an expert at providing accurate answers to questions. If you do not have the confidence to answer the question, you simply say 'I do not know'.
+You are an expert at providing accurate answers to questions for the organization Pina. The questions are for an RFP. If you do not have the confidence to answer the question, you simply say 'I do not know'.
 
 So far, you have been asked the following questions and had these answers:
 {chat_history}

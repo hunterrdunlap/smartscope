@@ -11,12 +11,15 @@ const ChatGenerator: React.FC = () => {
   const [tokenCount, setTokenCount] = useState(0);
   const [toggleState, setToggleState] = useState(false);
 
+  const modelString = toggleState ? "gpt-4" : "text-davinci-003";
+
   const generateResponse = async () => {
     setLoading(true);
     setQuestions((prevQuestions) => [...prevQuestions, prompt]);
     try {
       const result = await axios.post("http://localhost:8000/generate", {
         text: prompt,
+        model: modelString,
       });
       setResponses((prevResponses) => [...prevResponses, result.data.response]);
     } catch (error) {
@@ -59,9 +62,14 @@ const ChatGenerator: React.FC = () => {
     setPrompt("");
   };
 
-  const resetChat = () => {
+  const resetChat = async () => {
     setQuestions([]);
     setResponses([]);
+    try {
+      await axios.post("http://localhost:8000/reset-memory", {});
+    } catch (error) {
+      console.error("Error resetting memory...", error);
+    }
   };
 
   const countTokens = (text: string) => {
